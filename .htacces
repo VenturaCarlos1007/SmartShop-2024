@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteBase /SmartShop-2024/
+RewriteRule ^confirmacion_pago.php$ confirmacion_pago.php [L]

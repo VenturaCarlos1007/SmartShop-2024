@@ -1,26 +1,28 @@
 <?php
-
 include 'components/connect.php';
-
 session_start();
 
-if(isset($_SESSION['user_id'])){
+if (isset($_SESSION['user_id'])) {
    $user_id = $_SESSION['user_id'];
-}else{
+} else {
    $user_id = '';
    header('location:user_login.php');
-};
+   exit();
+}
 
-if(isset($_POST['order'])){
+// Mostrar mensajes de la sesión
+if (isset($_SESSION['message'])) {
+   echo '<div class="message">' . $_SESSION['message'] . '</div>';
+   // Limpiar el mensaje después de mostrarlo
+   unset($_SESSION['message']);
+}
 
-   $name = $_POST['name'];
-   $name = filter_var($name, FILTER_SANITIZE_STRING);
-   $number = $_POST['number'];
-   $number = filter_var($number, FILTER_SANITIZE_STRING);
-   $email = $_POST['email'];
-   $email = filter_var($email, FILTER_SANITIZE_STRING);
-   $method = $_POST['method'];
-   $method = filter_var($method, FILTER_SANITIZE_STRING);
+if (isset($_POST['order'])) {
+
+   $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+   $number = filter_var($_POST['number'], FILTER_SANITIZE_STRING);
+   $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
+   $method = filter_var($_POST['method'], FILTER_SANITIZE_STRING);
    $address = 'Casa/piso No. '. $_POST['flat'] .', '. $_POST['street'] .', '. $_POST['city'] .', '. $_POST['state'] .', '. $_POST['country'] .' - '. $_POST['pin_code'];
    $address = filter_var($address, FILTER_SANITIZE_STRING);
    $total_products = $_POST['total_products'];
@@ -29,21 +31,32 @@ if(isset($_POST['order'])){
    $check_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
    $check_cart->execute([$user_id]);
 
-   if($check_cart->rowCount() > 0){
+   if ($check_cart->rowCount() > 0) {
 
-      $insert_order = $conn->prepare("INSERT INTO `orders`(user_id, name, number, email, method, address, total_products, total_price) VALUES(?,?,?,?,?,?,?,?)");
+      $insert_order = $conn->prepare("INSERT INTO `orders` (user_id, name, number, email, method, address, total_products, total_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
       $insert_order->execute([$user_id, $name, $number, $email, $method, $address, $total_products, $total_price]);
 
       $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
       $delete_cart->execute([$user_id]);
 
-      $message[] = '¡pedido realizado con éxito!';
-   }else{
-      $message[] = 'su carrito está vacío';
+      $_SESSION['order_total'] = $total_price; // Guarda el total del pedido en una variable de sesión
+
+      if ($method == 'paypal') {
+         header('Location: formulario_paypal.php');
+         exit();
+      } else if ($method == 'credit card') {
+         header('Location: formulario_tarjeta.php');
+         exit();
+      } else {
+         $_SESSION['message'] = '¡Pedido realizado con éxito!';
+         header('Location: checkout.php');
+         exit();
+      }
+
+   } else {
+      $message[] = 'Su carrito está vacío';
    }
-
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -52,12 +65,10 @@ if(isset($_POST['order'])){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>checkout</title>
+   <title>Checkout</title>
    
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
    <link rel="stylesheet" href="css/style.css">
-
 </head>
 <body>
    
@@ -75,21 +86,21 @@ if(isset($_POST['order'])){
          $cart_items[] = '';
          $select_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
          $select_cart->execute([$user_id]);
-         if($select_cart->rowCount() > 0){
-            while($fetch_cart = $select_cart->fetch(PDO::FETCH_ASSOC)){
-               $cart_items[] = $fetch_cart['name'].' ('.$fetch_cart['price'].' x '. $fetch_cart['quantity'].') - ';
+         if ($select_cart->rowCount() > 0) {
+            while ($fetch_cart = $select_cart->fetch(PDO::FETCH_ASSOC)) {
+               $cart_items[] = $fetch_cart['name'] . ' (' . $fetch_cart['price'] . ' x ' . $fetch_cart['quantity'] . ') - ';
                $total_products = implode($cart_items);
                $grand_total += ($fetch_cart['price'] * $fetch_cart['quantity']);
       ?>
-         <p> <?= $fetch_cart['name']; ?> <span>(<?= '$'.$fetch_cart['price'].'/- x '. $fetch_cart['quantity']; ?>)</span> </p>
+         <p> <?= $fetch_cart['name']; ?> <span>(<?= '$' . $fetch_cart['price'] . '/- x ' . $fetch_cart['quantity']; ?>)</span> </p>
       <?php
             }
-         }else{
-            echo '<p class="empty">su carrito está vacío</p>';
+         } else {
+            echo '<p class="empty">Su carrito está vacío</p>';
          }
       ?>
          <input type="hidden" name="total_products" value="<?= $total_products; ?>">
-         <input type="hidden" name="total_price" value="<?= $grand_total; ?>" value="">
+         <input type="hidden" name="total_price" value="<?= $grand_total; ?>">
          <div class="grand-total">Total general: <span>$<?= $grand_total; ?></span></div>
       </div>
 
@@ -98,18 +109,18 @@ if(isset($_POST['order'])){
       <div class="flex">
          <div class="inputBox">
             <span>Su nombre :</span>
-            <input type="text" name="name" placeholder="introduzca su nombre" class="box" maxlength="20" required>
+            <input type="text" name="name" placeholder="Introduzca su nombre" class="box" maxlength="20" required>
          </div>
          <div class="inputBox">
-            <span>Su número :</span>
-            <input type="number" name="number" placeholder="introduzca su número" class="box" min="0" max="9999999999" onkeypress="if(this.value.length == 10) return false;" required>
+            <span>Número de teléfono:</span>
+            <input type="number" name="number" placeholder="Introduzca su número" class="box" min="0" max="9999999999" onkeypress="if(this.value.length == 10) return false;" required>
          </div>
          <div class="inputBox">
             <span>Su correo electrónico :</span>
-            <input type="email" name="email" placeholder="introduzca su correo electrónico" class="box" maxlength="50" required>
+            <input type="email" name="email" placeholder="Introduzca su correo electrónico" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>Seleccione un metodo de pago :</span>
+            <span>Seleccione un método de pago :</span>
             <select name="method" class="box" required>
                <option value="cash on delivery">Pago contra entrega</option>
                <option value="credit card">Tarjeta de crédito o débito</option>
@@ -118,7 +129,7 @@ if(isset($_POST['order'])){
          </div>
          <div class="inputBox">
             <span>Dirección línea 01 :</span>
-            <input type="text" name="flat" placeholder="p. ej. Número de casa" class="box" maxlength="50" required>
+            <input type="text" name="flat" placeholder="P. ej. Número de casa" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
             <span>Dirección línea 02 :</span>
@@ -138,27 +149,15 @@ if(isset($_POST['order'])){
          </div>
          <div class="inputBox">
             <span>Código postal :</span>
-            <input type="number" min="0" name="pin_code" placeholder="e.j. 1601" min="0" max="999999" onkeypress="if(this.value.length == 6) return false;" class="box" required>
+            <input type="number" min="0" name="pin_code" placeholder="E.j. 1601" min="0" max="999999" onkeypress="if(this.value.length == 6) return false;" class="box" required>
          </div>
       </div>
 
-      <input type="submit" name="order" class="btn <?= ($grand_total > 1)?'':'disabled'; ?>" value="Realizar pedido">
+      <input type="submit" name="order" class="btn <?= ($grand_total > 1) ? '' : 'disabled'; ?>" value="Realizar pedido">
 
    </form>
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <?php include 'components/footer.php'; ?>
 

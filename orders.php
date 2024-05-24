@@ -65,54 +65,42 @@ if(isset($_SESSION['user_id'])){
 
    </div>
    
-   <div class="box-container">
    <?php
-      echo '<style>';
-      echo '.box-container {';
-      echo '    margin-top: 50px;';
-      echo '    display: flex;';
-      echo '    justify-content: center;';
-      echo '    align-items: center;';
-      echo '}';
-      echo '</style>';
+      if($select_orders->rowCount() > 0){
+         echo '<div class="box-container">';
+         echo '<style>';
+         echo '.box-container {';
+         echo '    margin-top: 50px;';
+         echo '    display: flex;';
+         echo '    justify-content: center;';
+         echo '    align-items: center;';
+         echo '}';
+         echo '</style>';
 
-      echo '<style>';
-      echo '.download-btn {';
-      echo '    display: inline-block;';
-      echo '    padding: 10px 20px;';
-      echo '    background-color: #4CAF50;';
-      echo '    color: #fff;';
-      echo '    text-decoration: none;';
-      echo '    border-radius: 5px;';
-      echo '    margin-right: 10px;';
-      echo '    font-size: 16px;';
-      echo '}';
-      echo '.download-btn:hover {';
-      echo '    background-color: #45a049;';
-      echo '}';
-      echo '</style>';
+         echo '<style>';
+         echo '.download-btn {';
+         echo '    display: inline-block;';
+         echo '    padding: 10px 20px;';
+         echo '    background-color: #4CAF50;';
+         echo '    color: #fff;';
+         echo '    text-decoration: none;';
+         echo '    border-radius: 5px;';
+         echo '    margin-right: 10px;';
+         echo '    font-size: 16px;';
+         echo '}';
+         echo '.download-btn:hover {';
+         echo '    background-color: #45a049;';
+         echo '}';
+         echo '</style>';
 
-      echo '<a href="download.php?format=pdf" class="download-btn">Descargar PDF</a>';
+         echo '<a href="download.php?format=pdf" class="download-btn">Descargar PDF</a>';
 
-      echo '<a href="download.php?format=csv" class="download-btn">Descargar CSV</a>';
+         echo '<a href="download.php?format=csv" class="download-btn">Descargar CSV</a>';
+         echo '</div>';
+      }
    ?>
-</div>
-
-
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <?php include 'components/footer.php'; ?>
 
