@@ -61,7 +61,7 @@ include 'components/wishlist_cart.php';
    <?php
       }
    }else{
-      echo '<p class="empty">no se han encontrado productos</p>';
+      echo '<p class="empty">No se han encontrado productos</p>';
    }
    ?>
 

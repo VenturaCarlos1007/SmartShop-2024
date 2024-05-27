@@ -4,11 +4,11 @@ include 'components/connect.php';
 
 session_start();
 
-if(isset($_SESSION['user_id'])){
+if (isset($_SESSION['user_id'])) {
    $user_id = $_SESSION['user_id'];
-}else{
+} else {
    $user_id = '';
-};
+}
 
 ?>
 
@@ -21,7 +21,6 @@ if(isset($_SESSION['user_id'])){
    <title>Pedidos</title>
    
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
    <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -36,37 +35,37 @@ if(isset($_SESSION['user_id'])){
    <div class="box-container">
 
    <?php
-      if($user_id == ''){
-         echo '<p class="empty">por favor, inicie sesión para ver sus pedidos</p>';
-      }else{
+      if ($user_id == '') {
+         echo '<p class="empty">Por favor, inicie sesión para ver sus pedidos</p>';
+      } else {
          $select_orders = $conn->prepare("SELECT * FROM `orders` WHERE user_id = ?");
          $select_orders->execute([$user_id]);
-         if($select_orders->rowCount() > 0){
-            while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
+         if ($select_orders->rowCount() > 0) {
+            while ($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)) {
    ?>
    <div class="box">
-      <p>Colocado el día:<span><?= $fetch_orders['placed_on']; ?></span></p>
-      <p>Nombre : <span><?= $fetch_orders['name']; ?></span></p>
-      <p>Correo electrónico : <span><?= $fetch_orders['email']; ?></span></p>
-      <p>Número de teléfono :<span><?= $fetch_orders['number']; ?></span></p>
-      <p>Dirección :<span><?= $fetch_orders['address']; ?></span></p>
-      <p>Forma de pago :<span><?= $fetch_orders['method']; ?></span></p>
-      <p>Sus pedidos :<span><?= $fetch_orders['total_products']; ?></span></p>
-      <p>Precio total :<span>$<?= $fetch_orders['total_price']; ?></span></p>
-      <p>Estado del pago : <span style="color:<?php if($fetch_orders['payment_status'] == 'pendiente'){ echo 'red'; }else{ echo 'green'; }; ?>"><?= $fetch_orders['payment_status']; ?></span> </p>
+      <p>Colocado el día:<span><?= htmlspecialchars($fetch_orders['placed_on']); ?></span></p>
+      <p>Nombre : <span><?= htmlspecialchars($fetch_orders['name']); ?></span></p>
+      <p>Correo electrónico : <span><?= htmlspecialchars($fetch_orders['email']); ?></span></p>
+      <p>Número de teléfono :<span><?= htmlspecialchars($fetch_orders['number']); ?></span></p>
+      <p>Dirección :<span><?= htmlspecialchars($fetch_orders['address']); ?></span></p>
+      <p>Forma de pago :<span><?= htmlspecialchars($fetch_orders['method']); ?></span></p>
+      <p>Sus pedidos :<span><?= htmlspecialchars($fetch_orders['total_products']); ?></span></p>
+      <p>Precio total :<span>$<?= htmlspecialchars($fetch_orders['total_price']); ?></span></p>
+      <p>Estado del pago : <span style="color:<?php if ($fetch_orders['payment_status'] == 'pendiente') { echo 'red'; } else { echo 'green'; }; ?>"><?= htmlspecialchars($fetch_orders['payment_status']); ?></span> </p>
    </div>
    <?php
-      }
-      }else{
-         echo '<p class="empty">aún no se han realizado pedidos!</p>';
-      }
+            }
+         } else {
+            echo '<p class="empty">¡Aún no se han realizado pedidos!</p>';
+         }
       }
    ?>
 
    </div>
    
    <?php
-      if($select_orders->rowCount() > 0){
+      if ($user_id != '' && $select_orders->rowCount() > 0) {
          echo '<div class="box-container">';
          echo '<style>';
          echo '.box-container {';

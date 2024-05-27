@@ -81,7 +81,7 @@ if(isset($_POST['update_qty'])){
    $grand_total += $sub_total;
       }
    }else{
-      echo '<p class="empty">su carrito está vacío</p>';
+      echo '<p class="empty">Su carrito está vacío</p>';
    }
    ?>
    </div>

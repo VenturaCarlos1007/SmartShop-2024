@@ -1,15 +1,16 @@
 <?php
 session_start();
 
+$message = [];
+
 if (isset($_GET['orderID'])) {
     $orderID = $_GET['orderID'];
-
-    // Aquí puedes procesar el pedido, actualizar la base de datos, enviar correos, etc.
-    $_SESSION['message'] = '¡Pedido realizado con éxito! Su ID de pedido es: ' . $orderID;
-    header('Location: checkout.php');
-    exit();
+    $message[] = '¡Pedido realizado con éxito! Su ID de pedido es: ' . $orderID;
 } else {
-    $_SESSION['message'] = 'Error en el pago. No se recibió ningún ID de pedido.';
-    header('Location: checkout.php');
-    exit();
+    $message[] = 'Error en el pago. No se recibió ningún ID de pedido.';
 }
+
+$_SESSION['messages'] = $message; // Guarda el array de mensajes en la sesión
+header('Location: checkout.php');
+exit();
+?>

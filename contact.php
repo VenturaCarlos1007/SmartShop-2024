@@ -10,6 +10,8 @@ if(isset($_SESSION['user_id'])){
    $user_id = '';
 };
 
+
+
 if(isset($_POST['send'])){
 
    $name = $_POST['name'];

@@ -11,12 +11,12 @@
    }
 ?>
 
-
 <header class="header">
 
    <section class="flex">
 
       <a href="index.php" class="logo">Smart<span>Shop</span></a>
+      
 
       <nav class="navbar">
          <a href="index.php">Inicio</a>
@@ -24,6 +24,17 @@
          <a href="orders.php">Pedidos</a>
          <a href="shop.php">Compra ahora</a>
          <a href="contact.php">Contáctanos</a>
+         <div class="dropdown">
+            <button class="dropbtn">Categorías <i class="fa fa-caret-down"></i></button>
+            <div class="dropdown-content">
+               <a href="category.php?category=laptop">Laptops</a>
+               <a href="category.php?category=telefono">Smartphones</a>
+               <a href="category.php?category=tv">Television</a>
+               <a href="category.php?category=reloj">Relojes</a>
+               <a href="category.php?category=mouse">Mouse</a>
+               <a href="category.php?category=camara">Cámaras</a>
+            </div>
+         </div>
       </nav>
 
       <div class="icons">
@@ -56,7 +67,7 @@
             <a href="user_register.php" class="option-btn">Registrarse</a>
             <a href="user_login.php" class="option-btn">Iniciar sesión</a>
          </div>
-         <a href="components/user_logout.php" class="delete-btn" onclick="return confirm('logout from the website?');">Cerrar sesión</a> 
+         <a href="components/user_logout.php" class="delete-btn" onclick="return confirm('¿Cerrar sesión del sitio web?');">Cerrar sesión</a> 
          <?php
             }else{
          ?>
@@ -68,9 +79,97 @@
          <?php
             }
          ?>      
-         
       </div>
 
    </section>
 
 </header>
+
+<style>
+/* Estilos para el menú desplegable */
+.dropdown {
+   position: relative;
+   display: inline-block;
+}
+
+.dropbtn {
+   background-color: #2980b9;
+   color: white;
+   padding: 16px;
+   font-size: 16px;
+   border: none;
+   cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+   background-color: #003a61;
+}
+
+.dropdown-content {
+   display: none;
+   position: absolute;
+   background-color: #f9f9f9;
+   min-width: 160px;
+   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+   z-index: 1;
+}
+
+.dropdown-content a {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+}
+
+.dropdown-content a:hover {
+   background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+   display: block;
+}
+
+
+
+/* Estilos específicos para móviles */
+@media (max-width: 768px) {
+
+   .header .dropdown {
+      width: 100%;
+   }
+
+   .header .dropdown .dropbtn {
+      width: 100%;
+   }
+
+   .header .dropdown-content {
+      position: static;
+      width: 100%;
+   }
+
+   .header .icons {
+      justify-content: space-between;
+      width: 100%;
+   }
+
+   .header .profile {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 20px;
+   }
+
+   .header .profile p {
+      margin: 10px 0;
+   }
+
+   .header .profile .btn,
+   .header .profile .option-btn,
+   .header .profile .delete-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+   }
+}
+</style>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
 
 :root{
    --main-color:#2980b9;
@@ -14,7 +14,7 @@
 
 
 *{
-   font-family: 'Nunito', sans-serif;
+   font-family: 'Roboto', sans-serif;
    margin:0; padding:0;
    box-sizing: border-box;
    outline: none; border:none;
@@ -71,7 +71,7 @@ section{
    border-radius: .5rem;
    padding:1rem 1rem;
    font-size: 1.7rem;
-   text-transform: capitalize;
+   text-transform: none;
    color:var(--white);
    cursor: pointer;
    text-align: center;
@@ -138,7 +138,7 @@ section{
    color:var(--red);
    border-radius: .5rem;
    font-size: 2rem;
-   text-transform: capitalize;
+   text-transform: none;
 }
 
 .disabled{
@@ -234,7 +234,7 @@ section{
 }
 
 .home-bg{
-   background:url(../images/home-bg.png) no-repeat;
+   background:url(../images/home-bg2.png) no-repeat;
    background-size: cover;
    background-position: center;
 }
@@ -265,13 +265,13 @@ section{
 
 .home-bg .home .slide .content span{
    font-size: 2rem;
-   color:var(--white);
+   color:var(--black);
 }
 
 .home-bg .home .slide .content h3{
    margin-top: 1rem;
    font-size: 4rem;
-   color:var(--white);
+   color:var(--black);
    text-transform: uppercase;
 }
 

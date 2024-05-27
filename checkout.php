@@ -11,10 +11,9 @@ if (isset($_SESSION['user_id'])) {
 }
 
 // Mostrar mensajes de la sesión
-if (isset($_SESSION['message'])) {
-   echo '<div class="message">' . $_SESSION['message'] . '</div>';
-   // Limpiar el mensaje después de mostrarlo
-   unset($_SESSION['message']);
+if (isset($_SESSION['messages'])) {
+   $message = $_SESSION['messages'];
+   unset($_SESSION['messages']); // Limpiar los mensajes después de mostrarlos
 }
 
 if (isset($_POST['order'])) {
@@ -23,7 +22,7 @@ if (isset($_POST['order'])) {
    $number = filter_var($_POST['number'], FILTER_SANITIZE_STRING);
    $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
    $method = filter_var($_POST['method'], FILTER_SANITIZE_STRING);
-   $address = 'Casa/piso No. '. $_POST['flat'] .', '. $_POST['street'] .', '. $_POST['city'] .', '. $_POST['state'] .', '. $_POST['country'] .' - '. $_POST['pin_code'];
+   $address = 'Casa/piso No. ' . $_POST['flat'] . ', ' . $_POST['street'] . ', ' . $_POST['city'] . ', ' . $_POST['state'] . ', ' . $_POST['country'] . ' - ' . $_POST['pin_code'];
    $address = filter_var($address, FILTER_SANITIZE_STRING);
    $total_products = $_POST['total_products'];
    $total_price = $_POST['total_price'];
@@ -44,13 +43,8 @@ if (isset($_POST['order'])) {
       if ($method == 'paypal') {
          header('Location: formulario_paypal.php');
          exit();
-      } else if ($method == 'credit card') {
-         header('Location: formulario_tarjeta.php');
-         exit();
       } else {
-         $_SESSION['message'] = '¡Pedido realizado con éxito!';
-         header('Location: checkout.php');
-         exit();
+         $message[] = '¡Pedido realizado con éxito!';
       }
 
    } else {
@@ -122,8 +116,7 @@ if (isset($_POST['order'])) {
          <div class="inputBox">
             <span>Seleccione un método de pago :</span>
             <select name="method" class="box" required>
-               <option value="cash on delivery">Pago contra entrega</option>
-               <option value="credit card">Tarjeta de crédito o débito</option>
+               <option value="pago contra entrega">Pago contra entrega</option>
                <option value="paypal">PayPal</option>
             </select>
          </div>
@@ -162,6 +155,15 @@ if (isset($_POST['order'])) {
 <?php include 'components/footer.php'; ?>
 
 <script src="js/script.js"></script>
+
+<?php
+// Mostrar mensajes de la sesión
+if (!empty($message)) {
+   foreach ($message as $msg) {
+      echo '<p class="message">' . $msg . '</p>';
+   }
+}
+?>
 
 </body>
 </html>

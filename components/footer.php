@@ -23,7 +23,7 @@
          <a href="tel:78164658"><i class="fas fa-phone"></i> +503 78164658</a>
          <a href="tel:61257890"><i class="fas fa-phone"></i> +503 61257890</a>
          <a href="mailto:smartshopsv24@gmail.com"><i class="fas fa-envelope"></i> smartshopsv24@gmail.com</a>
-         <a href="https://www.google.com/myplace"><i class="fas fa-map-marker-alt"></i> San Salvador, El Salvador </a>
+         <a href="https://maps.app.goo.gl/t23WU1z6LmuvgEew5" target="_blank"><i class="fas fa-map-marker-alt"></i> San Salvador, El Salvador </a>
       </div>
 
       <div class="box">
@@ -35,6 +35,6 @@
 
    </section>
 
-   <div class="credit">&copy; copyright @ <?= date('Y'); ?> by <span>Project XP</span> | todos los derechos reservados!</div>
+   <div class="credit">&copy; copyright @ <?= date('Y'); ?> by <span>Project SmartShop</span> | todos los derechos reservados!</div>
 
 </footer>

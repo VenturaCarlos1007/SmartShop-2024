@@ -12,7 +12,7 @@ $orderTotal = $_SESSION['order_total'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Pago con PayPal</title>
+    <title>Pago con PayPal</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,6 +27,10 @@ $orderTotal = $_SESSION['order_total'];
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+        }
         h1 {
             text-align: center;
             margin-bottom: 20px;
@@ -35,12 +39,13 @@ $orderTotal = $_SESSION['order_total'];
             text-align: center;
         }
     </style>
-    <script src="https://www.paypal.com/sdk/js?client-id=AaAUF1R8TDWE0I_IVBRP5cNTCBkCO-FM8dV53jMD4Wr-nJYQcSTXbFdvWknhYel1AXMt0Vpd8xhHYvEL&currency=USD"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AaAUF1R8TDWE0I_IVBRP5cNTCBkCO-FM8dV53jMD4Wr-nJYQcSTXbFdvWknhYel1AXMt0Vpd8xhHYvEL&currency=USD&locale=es_ES"></script>
 </head>
 <body>
 
 <div class="container">
-    <h1>Formulario de Pago con PayPal</h1>
+    <img src="images/logo.png" alt="SmartShop Logo" class="logo">
+    <h1>Pago con PayPal</h1>
 
     <div id="paypal-button-container"></div>
 </div>
@@ -51,7 +56,7 @@ $orderTotal = $_SESSION['order_total'];
             return actions.order.create({
                 purchase_units: [{
                     amount: {
-                        value: '<?php echo $orderTotal; ?>' // Usa el valor de la sesión
+                        value: '<?php echo $orderTotal; ?>' 
                     }
                 }]
             });
@@ -68,4 +73,3 @@ $orderTotal = $_SESSION['order_total'];
 
 </body>
 </html>
-<html> <head></head>
